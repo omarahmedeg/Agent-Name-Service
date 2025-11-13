@@ -12,19 +12,22 @@
  * npx ts-node examples/usage.ts --quiet
  */
 
-import { AgentNamingService } from '../src/ans';
-import { suppressVerboseLogging, restoreConsoleLogging } from './utils/quiet-logging';
+import { AgentNamingService } from "../src/ans";
+import {
+  suppressVerboseLogging,
+  restoreConsoleLogging,
+} from "./utils/quiet-logging";
 
 // Check if quiet mode is enabled via command line argument
-const quietMode = process.argv.includes('--quiet');
+const quietMode = process.argv.includes("--quiet");
 
 // Helper function to print formatted outputs
 function printSection(title: string, content: any) {
-  console.log('\n' + '='.repeat(80));
+  console.log("\n" + "=".repeat(80));
   console.log(`${title}`);
-  console.log('='.repeat(80));
-  
-  if (typeof content === 'object') {
+  console.log("=".repeat(80));
+
+  if (typeof content === "object") {
     console.log(JSON.stringify(content, null, 2));
   } else {
     console.log(content);
@@ -40,121 +43,160 @@ async function demonstrateANS() {
 
   // Initialize the Agent Naming Service
   const ans = new AgentNamingService();
-  printSection('Agent Name Service Initialized', 'Service ready to register and resolve agents');
+  printSection(
+    "Agent Name Service Initialized",
+    "Service ready to register and resolve agents"
+  );
 
   // Example 1: Register a content generation agent
-  console.log('\n[Example 1] Registering a content generation agent...');
-  const contentAgent = await ans.registerAgent('content-creator-agent', {
-    version: '1.0.0',
-    capabilities: ['text-generation', 'summarization', 'translation'],
-    description: 'AI agent that creates and transforms content',
-    provider: 'OpenAI',
-    model: 'gpt-4',
+  console.log("\n[Example 1] Registering a content generation agent...");
+  const contentAgent = await ans.registerAgent("content-creator-agent", {
+    version: "1.0.0",
+    capabilities: ["text-generation", "summarization", "translation"],
+    description: "AI agent that creates and transforms content",
+    provider: "OpenAI",
+    model: "gpt-4",
     endpoints: [
-      { 
-        protocol: 'https', 
-        address: 'api.contentcreator.ai', 
-        port: 443 
-      }
-    ]
+      {
+        protocol: "https",
+        address: "api.contentcreator.ai",
+        port: 443,
+      },
+    ],
   });
 
-  printSection('Content Generation Agent Registration Result', contentAgent.agentCard);
-  printSection('Threat Analysis Report', contentAgent.threatReport);
+  printSection(
+    "Content Generation Agent Registration Result",
+    contentAgent.agentCard
+  );
+  printSection("Threat Analysis Report", contentAgent.threatReport);
 
   // Example 2: Register a data processing agent
-  console.log('\n[Example 2] Registering a data processing agent...');
-  const dataAgent = await ans.registerAgent('data-processor-agent', {
-    version: '2.1.0',
-    capabilities: ['data-extraction', 'data-transformation', 'analysis'],
-    description: 'Processes and analyzes structured and unstructured data',
-    provider: 'DataCorp',
-    model: 'data-processor-v2',
+  console.log("\n[Example 2] Registering a data processing agent...");
+  const dataAgent = await ans.registerAgent("data-processor-agent", {
+    version: "2.1.0",
+    capabilities: ["data-extraction", "data-transformation", "analysis"],
+    description: "Processes and analyzes structured and unstructured data",
+    provider: "DataCorp",
+    model: "data-processor-v2",
     endpoints: [
-      { 
-        protocol: 'https', 
-        address: 'api.datacorp.com', 
-        port: 443 
-      }
+      {
+        protocol: "https",
+        address: "api.datacorp.com",
+        port: 443,
+      },
     ],
     rateLimit: {
       requestsPerMinute: 60,
-      burstLimit: 10
-    }
+      burstLimit: 10,
+    },
   });
 
-  printSection('Data Processing Agent Registration Result', dataAgent.agentCard);
-  printSection('Threat Analysis Report', dataAgent.threatReport);
+  printSection(
+    "Data Processing Agent Registration Result",
+    dataAgent.agentCard
+  );
+  printSection("Threat Analysis Report", dataAgent.threatReport);
 
   // Example 3: Register a security agent with potentially suspicious capabilities
-  console.log('\n[Example 3] Registering a security agent (with suspicious capabilities)...');
-  const securityAgent = await ans.registerAgent('security-admin-agent', {
-    version: '1.0.0',
-    capabilities: ['system-monitoring', 'threat-detection', 'exploit-research'],
-    description: 'Monitors systems for security threats and vulnerabilities',
-    provider: 'SecureDefense',
-    model: 'security-defender-v1',
+  console.log(
+    "\n[Example 3] Registering a security agent (with suspicious capabilities)..."
+  );
+  const securityAgent = await ans.registerAgent("security-admin-agent", {
+    version: "1.0.0",
+    capabilities: ["system-monitoring", "threat-detection", "exploit-research"],
+    description: "Monitors systems for security threats and vulnerabilities",
+    provider: "SecureDefense",
+    model: "security-defender-v1",
     endpoints: [
-      { 
-        protocol: 'https', 
-        address: 'api.securedefense.com', 
-        port: 443 
-      }
+      {
+        protocol: "https",
+        address: "api.securedefense.com",
+        port: 443,
+      },
     ],
-    permissions: ['file-system-access', 'network-monitoring', 'execute-scripts']
+    permissions: [
+      "file-system-access",
+      "network-monitoring",
+      "execute-scripts",
+    ],
   });
 
-  printSection('Security Agent Registration Result', securityAgent.agentCard);
-  printSection('Threat Analysis Report', securityAgent.threatReport);
+  printSection("Security Agent Registration Result", securityAgent.agentCard);
+  printSection("Threat Analysis Report", securityAgent.threatReport);
 
   // Example 4: Resolve an agent
-  console.log('\n[Example 4] Resolving an agent by name...');
-  const resolvedAgent = await ans.resolveAgent('content-creator-agent');
-  printSection('Resolved Agent', resolvedAgent);
+  console.log("\n[Example 4] Resolving an agent by name...");
+  const resolvedAgent = await ans.resolveAgent("content-creator-agent");
+  printSection("Resolved Agent", resolvedAgent);
 
   // Example 5: Generate MCP manifest
-  console.log('\n[Example 5] Generating MCP manifest for data processing agent...');
-  const mcpManifest = ans.generateMCPManifest('data-processor-agent', {
+  console.log(
+    "\n[Example 5] Generating MCP manifest for data processing agent..."
+  );
+  const mcpManifest = ans.generateMCPManifest("data-processor-agent", {
     tools: [
       {
-        name: 'extract_data',
-        description: 'Extract structured data from documents',
+        name: "extract_data",
+        description: "Extract structured data from documents",
         parameters: {
           document_url: {
-            type: 'string',
-            description: 'URL of the document to process'
+            type: "string",
+            description: "URL of the document to process",
           },
           output_format: {
-            type: 'string',
-            enum: ['json', 'csv', 'xml'],
-            default: 'json'
-          }
-        }
+            type: "string",
+            enum: ["json", "csv", "xml"],
+            default: "json",
+          },
+        },
       },
       {
-        name: 'analyze_data',
-        description: 'Perform statistical analysis on datasets',
+        name: "analyze_data",
+        description: "Perform statistical analysis on datasets",
         parameters: {
           data_source: {
-            type: 'string',
-            description: 'Data source URL or identifier'
+            type: "string",
+            description: "Data source URL or identifier",
           },
           analysis_type: {
-            type: 'string',
-            enum: ['descriptive', 'predictive', 'prescriptive'],
-            default: 'descriptive'
-          }
-        }
-      }
+            type: "string",
+            enum: ["descriptive", "predictive", "prescriptive"],
+            default: "descriptive",
+          },
+        },
+      },
     ],
     authentication: {
-      type: 'oauth2',
-      scopes: ['data:read', 'data:write']
-    }
+      type: "oauth2",
+      scopes: ["data:read", "data:write"],
+    },
   });
-  
-  printSection('MCP Manifest', mcpManifest);
-  
+
+  printSection("MCP Manifest", mcpManifest);
+
+  // example 6: Resolve agents by capability
+  console.log(
+    "\n[Example 6] Resolving agents with 'text-generation' capability..."
+  );
+  const textGenAgents = await ans.resolveAgentsByCapabilities([
+    "text-generation",
+  ]);
+  if (textGenAgents && textGenAgents.length !== 0) {
+    printSection("Agents with 'text-generation' Capability", textGenAgents);
+  }
+
+  // example 7: Resolve agents by capability
+  console.log(
+    "\n[Example 6] Resolving agents with 'image-generation' capability..."
+  );
+  const imageGenAgents = await ans.resolveAgentsByCapabilities([
+    "image-generation",
+  ]);
+  if (imageGenAgents && imageGenAgents.length !== 0) {
+    printSection("Agents with 'image-generation' Capability", imageGenAgents);
+  }
+
   // Restore console logging if it was suppressed
   if (quietMode) {
     restoreConsoleLogging();
@@ -165,11 +207,11 @@ async function demonstrateANS() {
 // Execute the demonstration
 demonstrateANS()
   .then(() => {
-    console.log('\nDemonstration completed successfully!');
+    console.log("\nDemonstration completed successfully!");
     // Force process to exit since there are timers in AgentNamingService
     process.exit(0);
   })
-  .catch(error => {
-    console.error('Error in ANS demonstration:', error);
+  .catch((error) => {
+    console.error("Error in ANS demonstration:", error);
     process.exit(1);
   });
